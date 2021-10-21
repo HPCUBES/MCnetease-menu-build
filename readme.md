@@ -1,4 +1,3 @@
-# BDX-MENU
 ### AUTH YmStrip
 ### LIS GPL 3.0
 
