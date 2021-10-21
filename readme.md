@@ -1,9 +1,9 @@
 # BDX-MENU
-### AUTH NULL
+### AUTH YmStrip
 ### LIS GPL 3.0
 
 #### 启动方式
-```js
+```javascript
 node index
 ```
 
@@ -16,7 +16,7 @@ sh ./start.sh
 ```
 
 #### 标记信息
-```js
+```javascript
 //名字
 exports .name = '测试菜单'
 //提示
@@ -25,7 +25,7 @@ exports .hint = '这是测试'
 exports .init = '菜单a'
 ```
 #### 页面
-```js
+```javascript
 exports .page = [
 	//菜单a
 	{
@@ -83,7 +83,7 @@ exports .page = [
 
 <p>执行器是run的参数</p>
 
-```js
+```javascript
 //字符串
 //字符串 将作为跳转该菜单，如：
 [{run: 'a'}]
@@ -103,7 +103,7 @@ exports .page = [
 }]
 ```
 #### 激活器
-```js
+```javascript
 
 //事件框架:
 
@@ -122,26 +122,26 @@ exports .page = [
 
 ```
 #### 激活菜单的事件
-```js
+```javascript
 //激活器 
 exports .hook = 事件数组
 ```
 #### 切换菜单的事件
-```js
+```javascript
 exports .chose = 事件数组
 ```
 #### 确认菜单的事件
-```js
+```javascript
 exports .run = 事件数组
 ```
 #### 关闭菜单的事件
-```js
+```javascript
 exports .close = 事件数组
 ```
 #### render 处理器
 <p>render是一个简单的ast解析器,他可以自动解析一些字符串作为titleraw的JSON</p>
 
-```js
+```javascript
 "sss@s[x=3]bp@r$(a,money)s" => [
 	{
 		text: 'sss'
@@ -166,3 +166,5 @@ exports .close = 事件数组
 	}
 ]
 ```
+#### 如何将您按照上面信息写的js文件实现？找客服 QQ：1874689607 一键转换
+<p>为了将计划搭建到自动程序内</p>
