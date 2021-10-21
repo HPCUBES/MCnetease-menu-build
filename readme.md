@@ -1,6 +1,4 @@
-
-### LIS GPL 3.0
-
+# 文档
 #### 启动方式
 ```javascript
 node index
