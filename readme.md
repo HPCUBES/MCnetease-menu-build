@@ -1,4 +1,4 @@
-### AUTH YmStrip
+
 ### LIS GPL 3.0
 
 #### 启动方式
