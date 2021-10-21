@@ -139,8 +139,8 @@ exports .run = 事件数组
 exports .close = 事件数组
 ```
 #### render 处理器
-
 <p>render是一个简单的ast解析器,他可以自动解析一些字符串作为titleraw的JSON</p>
+
 ```js
 "sss@s[x=3]bp@r$(a,money)s" => [
 	{
