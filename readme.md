@@ -1,5 +1,5 @@
 # BDX-MENU
-### AUTH YmStrip
+### AUTH NULL
 ### LIS GPL 3.0
 
 #### 启动方式
