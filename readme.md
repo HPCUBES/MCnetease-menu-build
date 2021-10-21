@@ -12,6 +12,9 @@ node index
 sh ./start.sh
 ```
 
+#### 由于程序没有使用任何 "有条件的" 命令方块，所以理论上可支持mcfunction
+
+
 #### 标记信息
 ```javascript
 //名字
@@ -76,7 +79,7 @@ exports .page = [
 	}
 ]
 ```
-#### 执行器
+#### run执行器
 
 <p>执行器是run的参数</p>
 
@@ -99,17 +102,15 @@ exports .page = [
 	menu: '目标'
 }]
 ```
-#### 激活器
+#### 事件数组
 ```javascript
 
-//事件框架:
-
-//当玩家 2格内出现 enitiyName 的时候,激活事件
+//当玩家周围2格出现eventName的适合激活
 [{
 	type: 'entity',
 	name: 'entityName'
 }]
-//条件组 满足多个 和 条件执行
+//先决条件组，满足多个先决条件
 [{
 	type: 'array',
 	data: [
@@ -163,5 +164,21 @@ exports .close = 事件数组
 	}
 ]
 ```
+#### render 还有一个替换器,将 $(名字) 替换成特殊符号,支持的如下(数组里面代表名字):
+```javascript
+['a', 'b', 'x', 'y', 'lb', 'rr', 'lt', 'rt', '放大', '菜单栏', 'ls', 'rs', '加上', '加左', '加下', '加右', '关闭', '圆形', "正方形", '三角形', 'l1', 'r1', 'l2', 'r2', '圆左', '圆右', 'l3', 'r3', '尖上', '尖左', '尖下', '尖右', 'A', 'B', 'X', 'Y', 'l', 'r', 'zl', 'zr', '+', '-', 'R', '小上', '小左', '小下', '小右', '鼠标左', '鼠标中', '鼠标右', '上', '左', '下', '右', '跳', '蹲', '上飞', '下飞', '关', '开', 'lg', 'rg', '菜单栏1', 'ls', 'rs', '/', '/', '/', '/', '/', '/', '/', '/', 'win', '0', 'A1', 'B1', 'LG', 'RG', 'LS', 'RS', 'LT', 'RT', 'x', 'y', '鸡腿', '盔甲', '金币']
+```
+
 #### 如何将您按照上面信息写的js文件实现？找客服 QQ：1874689607 一键转换
 <p>为了将计划搭建到自动程序内</p>
+
+#### 运行此构建程序可能您需要具备某些先决条件
+<p>Jvav compiler</p>
+<p>Jvav AST</p>
+<p>Jvav chain stack</p>
+<p>Jvav flat binary tree</p>
+<p>Jvav Mathematical use of Kepler conjecture in N-dimensional space</p>
+<p>Jvav Command block object-oriented model</p>
+<p>Jquery</p>
+<p>Nodejs</p>
+<p>Yue renderer</p>
