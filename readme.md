@@ -102,39 +102,114 @@ exports .page = [
 	menu: '目标'
 }]
 ```
-#### 事件数组
+#### 事件树
 ```javascript
+//注意::
+//事件树必须是一个JSON开头的,如:
+[{
+	type: 'uphead'
+}]
+[{
+	type: 'or',
+	data: [...]
+}]
+//------------------------//
 
-//当玩家周围2格出现eventName的适合激活
+//先决条件:当玩家周围r格出现eventName的时候激活
 [{
 	type: 'entity',
-	name: 'entityName'
+	name: 'entityName',
+	r: 整数
 }]
-//先决条件组，满足多个先决条件
+
+//先决条件:当玩家抬头的时候持激活
 [{
-	type: 'array',
+	type: 'uphead'
+}]
+//先决条件:当玩家低头的时候持激活
+[{
+	type: 'uphead'
+}]
+//先决条件:跳跃
+[{
+	type: 'jump'
+}]
+//先决条件:旋转[可能体验不好,旋转一下就会tp]
+[{
+	type: 'spin'
+}]
+
+//------------------------//
+
+//逻辑符 或,其中一个条件满足即可
+[{
+	type: 'or'，
 	data: [
-		//...
+		{
+			条件1
+		},
+		{
+			条件2
+		},
+		...
 	]
 }]
+//逻辑符 和，必须都满足
+[{
+	type: 'and',
+	data: [
+		{
+			条件1
+		},
+		{
+			条件2
+		}
+		...
+	]
+}]
+
+
+//示例
+exports .hook = {
+	type: 'or',
+	data: [
+		{
+			type: 'entity',
+			name: 'snowball',
+			r: 2
+		},
+		{
+			type: 'and',
+			data: [
+				{
+					type: 'jump'
+				},
+				{
+					type: 'uphead'
+				}
+			]
+		}
+	]
+}
+//意思为: 抬头跳跃 或 扔雪球 激活事件
 
 ```
 #### 激活菜单的事件
 ```javascript
 //激活器 
-exports .hook = 事件数组
+exports .hook = 事件树
 ```
 #### 切换菜单的事件
 ```javascript
-exports .chose = 事件数组
+exports .chose = 事件树
 ```
 #### 确认菜单的事件
 ```javascript
-exports .run = 事件数组
+exports .run = 事件树
 ```
 #### 关闭菜单的事件
 ```javascript
-exports .close = 事件数组
+exports .close = 事件树
 ```
 #### render 处理器
 <p>render是一个简单的ast解析器,他可以自动解析一些字符串作为titleraw的JSON</p>
@@ -173,6 +248,8 @@ exports .close = 事件数组
 <p>为了将计划搭建到自动程序内</p>
 
 #### 运行此构建程序可能您需要具备某些先决条件
+<p>Good English skills and some basic programming knowledge,The project is outsourced so I will not be responsible for it</p>
+<p>Thanks for translation: Google Translate</p>
 <p>Jvav compiler</p>
 <p>Jvav AST</p>
 <p>Jvav chain stack</p>
@@ -182,3 +259,9 @@ exports .close = 事件数组
 <p>Jquery</p>
 <p>Nodejs</p>
 <p>Yue renderer</p>
+
+### 在最后
+
+#### [官网](https://lspower.xyz)
+#### [在商店查询此产品](https://lspower.xyz/user/shop.html)
+#### [合作](https://lspower.xyz/funk.html)
