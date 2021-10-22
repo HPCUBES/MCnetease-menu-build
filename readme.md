@@ -1,4 +1,6 @@
 # 文档
+#### 您可用通过JSON文本来编写配置信息,为了方便文档,此页面的JSON会将 {"index":data} 写成 {index:data}
+
 #### 启动方式
 ```javascript
 node index
@@ -15,274 +17,211 @@ sh ./start.sh
 #### 由于程序没有使用任何 "有条件的" 命令方块，所以理论上可支持mcfunction
 
 
-#### 标记信息
+#### 文档格式,如果没有标记选填,那么代表必填
 ```javascript
-//名字
-exports .name = '测试菜单'
-//提示
-exports .hint = '这是测试'
-//入口菜单
-exports .init = '菜单a'
-//需要3个计分板名字
-exports .v1 = '1号'
-exports .v2 = '2号'
-exports .v3 = '3号'
-```
-#### 页面
-```javascript
-exports .page = [
-	//菜单a
-	{
-		//配置
-		conf: {
-			//开关前后缀只对可选择项目有效
-			//开关状态的前缀 false没有
-			close: '$(关)>>§l§f',
-			open: '$(开)§l§e',
-			//开关状态后缀 false 没有
-			close_: false,
-			open_: '<<',
-			//最大显示行数
-			max: 5,
-			//onclose如果没有次参数,玩家关闭菜单将完全关闭,如果有,那么作为一条run执行
-			onclose: [
+{
+	//名字
+	name: '测试菜单',
+	//提示
+	hint: '这是测试',
+	//入口菜单,从关闭状态打开的菜单的名字
+	init:'菜单a',
+	//需要3个计分板名字,3个积分版会自动创建,您只需要定义名字即可
+	v1: '计分板1',
+	v2: '计分板2',
+	v3: '计分板3',
+	//命令方块导入的坐标,您可用通过结构方块,schematic等导入,但是需要明确导入的坐标
+	x: 'x',
+	y：'y',
+	z：'z',
+	//页面数据
+	page: [
+		//里面一个{}代表一个菜单页面
+		{
+			//菜单名字,不可重复
+			name: '名字',
+			//菜单配置[选填]
+			conf: {
+				//前缀后缀,如果为false,并且只要为选项的一行,才会执行,代表忽略,例如:
+				/*
 				{
-					//onclose里面只有一个close等价于不加onclose
-					action: 'close'
+					open: '当前>',
+					open_ "<",
+					close: '>非当前',
+					close_ flase
 				}
+				那么显示的是这样
+				'
+				菜单
+				当前>回城<
+				非当前>关闭
+				'
+				
+				*/
+				//当选项的前面,加上前缀
+				open: '前缀',
+				//当选项的后面,加上后缀
+				open_: '后缀',
+				//非当选项的前面,加上前缀
+				close: '前缀',
+				//非当选项的后面面,加上后缀
+				close_: '后缀',
+				//如果打开了这个菜单,关闭的时候执行一次执行JSON
+				onclose: 执行JSON,
+				//定义了该菜单最多显示几行
+				max: 5
+			},
+			data:[
+				//这里面每一个{}代表一行数据
+				//如果一行内数据是 单纯的字符,那么这是一个不可选择的
+				"§l§6Lspower菜单 §f@p",
+				//没有run的情况下同等与字符串,另外字符或text将通过render自动解析选择器,计分板等
+				{
+					text: '§l余额: §l§e$(@s,money)$(金币) §l最近实体:@e[type=!player,c=1,r=10]',
+				},
+				{
+					text: '回城',
+					//如果选到这一行,并且执行菜单.那么run会激活
+					run: 执行JSON
+				}
+				...更多的行
 			]
-		},
-		name: '菜单a',
+		}
+		...更多的菜单页面
+	],
+	//确定打开菜单的方式
+	hook: 逻辑运算JSON,
+	//打开菜单时执行什么[选填]
+	onhook: 执行JSON,
+	//确定切换菜单的方式
+	chose: 逻辑运算JSON,
+	//切换菜单时执行什么[选填]
+	onhook: 执行JSON,
+	//确定执行菜单选项的方式
+	run: 逻辑运算JSON,
+	//执行菜单选项时执行什么[选填]
+	onrun: 执行JSON,
+	//关闭菜单选项的方式
+	close: 逻辑运算JSON,
+	//关闭菜单时执行什么[选填]
+	onclose: 执行JSON
+```
+
+#### 什么是逻辑运算JSON？
+<p>我们实现了一套命令方块进行逻辑运算的算法,并且他可支持复杂的逻辑运算,比如和运算,或运算</p>
+
+<p>逻辑运算JSON是一个JSON,类型如下:</p>
+
+```javascript
+{
+	//任何逻辑运算JSON都可以加入selector,代表只有满足selector选择器的实体才会被检测
+	selector: '@s,@a[name=xxx] 之类的选择器,只能填写一个,如 "@e[tag=a]"'
+}
+//这是一个和运算,代表 data里面的逻辑运算JSON必须全部满足
+{
+	type: 'and',
+	data: [逻辑运算JSON1,逻辑运算JSON2...]
+}
+//这是一个或运算,代表 data里面的逻辑运算JSON只要任意一个满足即可
+{
+	type: 'or',
+	data: [逻辑运算JSON1,逻辑运算JSON2...]
+}
+//抬头的时候满足条件
+{
+	type: 'uphead'
+}
+//低头的时候满足
+{
+	type: 'downhead'
+}
+//旋转的时候满足
+{
+	type: 'spin'
+}
+//当周围出现实体的时候满足(自动kill实体)
+{
+	type: 'entity',
+	name: '实体英语名字',
+	r: 半径
+}
+//当跳跃的时候满足
+{
+	type: 'jump'
+}
+//当在某个方块上面的时候满足
+{
+	type: 'upblock',
+	dy: '方块离脚下距离',
+	name: '方块英语',
+	data: '方块特殊值'
+}
+//当在某方块下面的时候满足
+{
+	type: 'downblock',
+	dy: '方块离脚下距离',
+	name: '方块英语',
+	data: '方块特殊值'
+}
+//下面是一些示范:
+//我该如何完成雪球菜单打开菜单?
+{
+	hook: {
+		type: 'entity',
+		name: 'snowball',
+		r: 2
+	}
+}
+//扔雪球打开菜单,或者在 红石块 上面抬头打开菜单
+{
+	hook: {
+		type: 'or',
 		data: [
-			//菜单栏
 			{
-				text: '§l§6LightSpeedPower'
+				type: 'entity',
+				name: 'snowball',
+				r: 2
 			},
 			{
-				text: '回城',
-				//run是run执行器
-				run: [
-					//关闭菜单
+				type: 'and',
+				data: [
 					{
-						action: 'close'
+						type: 'uphead'
 					},
-					//命令
-					'tp @s 0 100 0',
+					{
+						type: 'upblock',
+						dy: 0.5,
+						name: 'redstone_block',
+						data: 0
+					}
 				]
-			},
-			{
-				//render 将自动解析 @s , 计分板 等字符串
-				text: '§l名字 @s 金币 $( @s , money )'
-			},
-			{
-				text: '生存管理',
-				//字符串情况下,将跳转至b菜单
-				run: 'b'
 			}
 		]
 	}
-]
-```
-#### run执行器
-
-<p>run执行器是run的参数</p>
-
-```javascript
-//字符串
-//字符串 将作为跳转该菜单，如：
-[{run: 'a'}] => [{
-	action: 'open',
-	menu: 'a'
-}]
-
-//单个数组 数组内的将依次解析，解析命令如下：
-
-//数组内的字符串,将作为一条execute该玩家的命令执行,如：
-['execute @s ~~~ say @s']
-//关闭菜单栏
-[{
-	action: 'close'
-}]
-//打开菜单栏
-[{
-	action: 'open',
-	menu: '目标'
-}]
-```
-#### 事件树
-```javascript
-//注意::
-//事件树必须是一个JSON开头的,如:
-[{
-	type: 'uphead'
-}]
-[{
-	type: 'or',
-	data: [...]
-}]
-//------------------------//
-//每一个对象都可以加一个selector,代表添加实体选择器,如:
-
-[{
-	type: 'uphead',
-	selector: '@a[tag=menu]'
-}]
-
-//------------------------//
-
-//先决条件:仅仅依靠pre选择器进行激活
-[{
-	type: 'nop',
-	pre: '选择器'
-}]
-
-//先决条件:当玩家周围r格出现eventName的时候激活
-[{
-	type: 'entity',
-	name: 'entityName',
-	r: 整数
-}]
-
-//先决条件:当玩家抬头的时候持激活
-[{
-	type: 'uphead'
-}]
-//先决条件:当玩家低头的时候持激活
-[{
-	type: 'downhead'
-}]
-//先决条件:跳跃
-[{
-	type: 'jump'
-}]
-//先决条件:旋转[可能体验不好,旋转一下就会tp]
-[{
-	type: 'spin'
-}]
-//先决条件:在什么方块之上
-[{
-	type: 'onblock',
-	name: '名字',
-	data: '特殊值'
-}]
-
-//------------------------//
-
-//逻辑符 或,其中一个条件满足即可
-[{
-	type: 'or'，
-	data: [
-		{
-			条件1
-		},
-		{
-			条件2
-		},
-		...
-	]
-}]
-//逻辑符 和，必须都满足
-[{
-	type: 'and',
-	data: [
-		{
-			条件1
-		},
-		{
-			条件2
-		}
-		...
-	]
-}]
-
-
-//示例
-exports .hook = {
-	type: 'or',
-	data: [
-		{
-			type: 'entity',
-			name: 'snowball',
-			r: 2
-		},
-		{
-			type: 'and',
-			data: [
-				{
-					type: 'jump'
-				},
-				{
-					type: 'uphead'
-				}
-			]
-		}
-	]
 }
-//意思为: 抬头跳跃 或 扔雪球 激活事件
-
-```
-#### 激活菜单的事件
-```javascript
-//激活菜单的事件
-exports .hook = 事件树
-//激活菜单后执行
-exports .onhook = run执行器
-```
-#### 切换菜单的事件
-```javascript
-//选择菜单的事件
-exports .chose = 事件树
-//选择菜单后执行
-exports .onchose = run执行器
-```
-#### 确认菜单的事件
-```javascript
-//执行菜单的事件
-exports .run = 事件树
-//执行菜单后执行
-exports .onrun = run执行器
-```
-#### 关闭菜单的事件
-```javascript
-//关闭菜单的事件
-exports .close = 事件树
-//关闭菜单后执行
-exports .onclose = run执行器
-```
-#### render 处理器
-<p>render是一个简单的ast解析器,他可以自动解析一些字符串作为titleraw的JSON</p>
-
-```javascript
-"sss@s[x=3]bp@r$(a,money)s" => [
-	{
-		text: 'sss'
-	},
-	{
-		selector: '@s[x=3]'
-	},
-	{
-		text: 'bp'
-	},
-	{
-		selector: '@r'
-	},
-	{
-		score: {
-			objective: 'money',
-			name: 'a'
-		}
-	},
-	{
-		text: 's'
+//在钻石方块上面扔鸡蛋,并且需要保证有 xxx 标签 打开菜单
+{
+	hook:{
+		type: 'and',
+		data: [
+			{
+				type: 'entity',
+				name: 'egg',
+				r: 2,
+				selector: '@a[tag=xxx]'
+			},
+			{
+				type: 'upblock',
+				dy: 0.5,
+				name: 'diamond_block',
+				data: 0
+			}
+		]
 	}
-]
-```
-#### render 还有一个替换器,将 $(名字) 替换成特殊符号,支持的如下(数组里面代表名字):
-```javascript
-['a', 'b', 'x', 'y', 'lb', 'rr', 'lt', 'rt', '放大', '菜单栏', 'ls', 'rs', '加上', '加左', '加下', '加右', '关闭', '圆形', "正方形", '三角形', 'l1', 'r1', 'l2', 'r2', '圆左', '圆右', 'l3', 'r3', '尖上', '尖左', '尖下', '尖右', 'A', 'B', 'X', 'Y', 'l', 'r', 'zl', 'zr', '+', '-', 'R', '小上', '小左', '小下', '小右', '鼠标左', '鼠标中', '鼠标右', '上', '左', '下', '右', '跳', '蹲', '上飞', '下飞', '关', '开', 'lg', 'rg', '菜单栏1', 'ls', 'rs', '/', '/', '/', '/', '/', '/', '/', '/', 'win', '0', 'A1', 'B1', 'LG', 'RG', 'LS', 'RS', 'LT', 'RT', 'x', 'y', '鸡腿', '盔甲', '金币']
+}
 ```
 
-<br>
+#### 执行JSON
 
 ### 模板
 
