@@ -221,6 +221,60 @@ sh ./start.sh
 		]
 	}
 }
+//复杂的运算!
+//拥有 a 标签的玩家 在红石块上抬头的时候, 如扔雪球,此时此刻有一个名字叫 steve 的玩家在周围14格,拥有t标签,并且在钻石块上面低头扔雪球的时候,最近的一名叫Alex的玩家如果此时扔了鸡蛋,那么他打开了菜单 [可以用这种复杂的检测搞紧急后门菜单]
+{
+	hook: {
+		selector: '@p[name=Alex]',
+		type: 'and',
+		data: [
+			{
+				selector: '@a[tag=a]',
+				type: 'and',
+				data: [
+					{
+						selector: '@a[name=steve,tag=t,r=14]',
+						type: 'and',
+						data: [
+							{
+								type: 'downhead'
+							},
+							{
+								type: 'upblock',
+								dy: 0.5,
+								name: 'diamond_block'
+							},
+							{
+								type: 'entity',
+								r: 2,
+								name: 'snowball'
+							}
+						]
+					},
+					{
+						type: 'uphead'
+					},
+					{
+						type: 'upblock',
+						dy: 1,
+						name: 'redstone_block',
+						data: 0
+					},
+					{
+						type: 'entity',
+						name: 'snowball',
+						r: 2
+					}
+				]
+			},
+			{
+				type: 'entity',
+				name: 'egg',
+				r: 2
+			}
+		]
+	}
+}
 ```
 
 #### 执行JSON
