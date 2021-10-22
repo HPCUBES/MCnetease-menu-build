@@ -527,7 +527,7 @@ sh ./start.sh
 <p>Yue renderer</p>
 
 
-#### [官网](https://lspower.xyz)
-#### [在商店查询此产品](https://lspower.xyz/user/shop.html)
-#### [合作](https://lspower.xyz/funk.html)
+#### [官网](https://lspower.top)
+#### [在商店查询此产品](https://lspower.top/user/shop.html)
+#### [合作](https://lspower.top/fnck.html)
 ##### 如果无法访问官网说明有可能我们的域名因为离谱的注册信息遭到了不测
