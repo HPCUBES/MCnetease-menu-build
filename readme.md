@@ -119,6 +119,16 @@ sh ./start.sh
 	//任何逻辑运算JSON都可以加入selector,代表只有满足selector选择器的实体才会被检测
 	selector: '@s,@a[name=xxx] 之类的选择器,只能填写一个,如 "@e[tag=a]"'
 }
+//nop 仅仅通过选择器运算
+{
+	type: 'nop',
+	selector: '选择器'
+}
+//非运算
+{
+	type: 'not',
+	data: 逻辑运算JSON
+}
 //这是一个和运算,代表 data里面的逻辑运算JSON必须全部满足
 {
 	type: 'and',
@@ -146,6 +156,12 @@ sh ./start.sh
 	type: 'entity',
 	name: '实体英语名字',
 	r: 半径
+}
+//execute检测,将满足if的实体,拿过来匹配append的实体
+{
+	type: 'exec',
+	if: 逻辑运算JSON,
+	append: 逻辑运算JSON
 }
 //当跳跃的时候满足
 {
@@ -222,59 +238,67 @@ sh ./start.sh
 	}
 }
 //复杂的运算!
-//拥有 a 标签的玩家 在红石块上抬头的时候, 如扔雪球,此时此刻有一个名字叫 steve 的玩家在周围14格,拥有t标签,并且在钻石块上面低头扔雪球的时候,最近的一名叫Alex的玩家如果此时扔了鸡蛋,那么他打开了菜单 [可以用这种复杂的检测搞紧急后门菜单]
+//一个低着头的玩家,跳跃起来的时候扔雪球,此时此刻2格内有一个抬着头并且陷入方块中的玩家,低着头跳跃那个玩家的10格内,如果没有苦力怕而且没有人的等级>50级,那么那个人打开了菜单
+
 {
 	hook: {
-		selector: '@p[name=Alex]',
-		type: 'and',
-		data: [
-			{
-				selector: '@a[tag=a]',
-				type: 'and',
-				data: [
-					{
-						selector: '@a[name=steve,tag=t,r=14]',
-						type: 'and',
-						data: [
-							{
-								type: 'downhead'
-							},
-							{
-								type: 'upblock',
-								dy: 0.5,
-								name: 'diamond_block'
-							},
-							{
-								type: 'entity',
-								r: 2,
-								name: 'snowball'
-							}
-						]
-					},
-					{
-						type: 'uphead'
-					},
-					{
-						type: 'upblock',
-						dy: 1,
-						name: 'redstone_block',
-						data: 0
-					},
-					{
-						type: 'entity',
-						name: 'snowball',
-						r: 2
-					}
-				]
-			},
-			{
-				type: 'entity',
-				name: 'egg',
-				r: 2
+		type: 'exec',
+		if: {
+			type: 'not',
+			data: {
+				type: 'nop',
+				selector: '@e[type=creeper]'
 			}
-		]
+		},
+		append: {
+			type: 'exec',
+			if: {
+				type: 'nop',
+				selector: '@a[l=50]'
+			},
+			append: {
+				selector: "@a[r=10]",
+				type: 'exec',
+				if: {
+					type: 'and',
+					data: [
+						{
+							type: 'uphead'
+						},
+						{
+							type: 'not',
+							data: {
+								type: 'upblock',
+								dy: 0,
+								name: 'air',
+								data: 0
+							}
+						}
+					]
+				},
+				append: {
+					selector: '@a[r=2]',
+					type: 'and',
+					data: [
+						{
+							type: 'jump'
+						},
+						{
+							type: 'downhead'
+						},
+						{
+							type: 'entity',
+							r: 2,
+							type: 'snowball'
+						}
+					]
+				}
+			}
+		}
 	}
 }
+
+
 ```
 
 #### 执行JSON
@@ -506,3 +530,4 @@ sh ./start.sh
 #### [官网](https://lspower.xyz)
 #### [在商店查询此产品](https://lspower.xyz/user/shop.html)
 #### [合作](https://lspower.xyz/funk.html)
+##### 如果无法访问官网说明有可能我们的域名因为离谱的注册信息遭到了不测
