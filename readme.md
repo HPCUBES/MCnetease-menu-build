@@ -104,11 +104,13 @@ sh ./start.sh
 	//关闭菜单选项的方式
 	close: 逻辑运算JSON,
 	//关闭菜单时执行什么[选填]
-	onclose: 执行JSON
+	onclose: 执行JSON,
+	//全局配置,如果在菜单页面,全局配置会覆盖conf没有的项目
+	conf: 配置
 ```
 
 #### 什么是逻辑运算JSON？
-<p>我们实现了一套命令方块进行逻辑运算的算法,并且他可支持复杂的逻辑运算,比如和运算,或运算</p>
+<p>我们实现了一套命令方块进行逻辑运算的算法,并且他可支持复杂的逻辑运算,比如和运算,或运算,并且它可以通过Jvav编译器来变成下面文档的格式</p>
 
 <p>逻辑运算JSON是一个JSON,类型如下:</p>
 
@@ -268,135 +270,129 @@ sh ./start.sh
 
 ### 模板
 
-```javascript
-
-exports .name = '测试菜单'
-
-exports .hint = '无'
-
-exports .init = '主菜单'
-
-exports .v1 = 'jf_menu_1'
-exports .v2 = 'jf_menu_2'
-exports .v3 = 'jf_menu_3'
-
-exports .hook = {
-	type: 'entity',
-	name: 'snowball',
-	r: 2
-}
-exports .onhook = [
-	"clear @p snowball",
-	"give @p snowball 16"
-]
-exports .chose = {
-	type: 'entity',
-	name: 'snowball',
-	r: 2
-}
-exports .onchose = [
-	"clear @p snowball",
-	"give @p snowball 16"
-]
-exports .run= {
-	type: 'uphead'
-}
-exports .close = {
-	type: 'downhead'
-}
-exports .page = [
-	{
-		name: '主菜单',
-		conf: {
-			close: '$(关)>>§l§f',
-			open: '$(开)§l§e',
-			//开关状态后缀 false 没有
-			close_: false,
-			open_: '<<',
-			//最大显示行数
-			max: 7,
-		},
-		data: [
-			{
-				text: '§l§6测试菜单 §f名称:§7@p §f金币:§e$(@p,money)'
-			},
-			{
-				text: '回城',
-				run: [
-					{
-						action: 'close',
-					},
-					{
-						action: 'cmd',
-						data: 'say §6§l成功回城'
-					},
-					"tp @s 0 100 0"
-				]
-			},
-			{
-				text: '生存菜单',
-				run: '生存菜单'
-			}
-		]
+```json
+{
+	"name": "测试菜单",
+	"hint": "无",
+	"init": "主菜单",
+	"v1": "jf_menu_1",
+	"v2": "jf_menu_2",
+	"v3": "jf_menu_3",
+	"x": 0,
+	"y": 100,
+	"z": 0,
+	"hook": {
+		"type": "entity",
+		"name": "snowball",
+		"r": 2
 	},
-	{
-		name: '生存菜单',
-		conf: {
-			close: '$(关)>>§l§f',
-			open: '$(开)§l§e',
-			//开关状态后缀 false 没有
-			close_: false,
-			open_: '<<',
-			//最大显示行数
-			max: 7,
-			onclose: [
-				//返回主菜单
+	"onhook": [
+		"clear @p snowball",
+		"give @p snowball 16",
+		"playsound random.orb @p ~~~ 1 1 1"
+	],
+	"chose": {
+		"type": "entity",
+		"name": "snowball",
+		"r": 2
+	},
+	"onchose": [
+		"clear @p snowball",
+		"give @p snowball 16",
+		"playsound random.orb @p ~~~ 1 1 1"
+	],
+	"run": {
+		"type": "uphead"
+	},
+	"close": {
+		"type": "downhead"
+	},
+	"conf": {
+		"close": "$(关)§l§f",
+		"open": "$(开)>>§l§e",
+		"close_": false,
+		"open_": "<<",
+		"max": 7
+	},
+	"page": [
+		{
+			"name": "主菜单",
+			"data": [
 				{
-					action: 'open',
-					menu: '主菜单'
+					"text": "§l§6测试菜单 §f名称:§7@p §f余额:§e$(@p,money) 硬币"
 				},
-				"say 返回了主菜单"
+				{
+					"text": "回城",
+					"run": [
+						{
+							"action": "close"
+						},
+						{
+							"action": "cmd",
+							"data": "say §6§l成功回城"
+						},
+						"tp @s 0 100 0"
+					]
+				},
+				{
+					"text": "生存菜单",
+					"run": "生存菜单"
+				}
 			]
 		},
-		data: [
-			{
-				text: '去生存区',
-				run: [
-					"tp @s 1000 20 1000"
+		{
+			"name": "生存菜单",
+			"conf": {
+				"onclose": [
+					{
+						"action": "open",
+						"menu": "主菜单"
+					},
+					"say 返回了主菜单"
 				]
 			},
-			{
-				text: '签到',
-				run: [
-					"scoreboard players set @s task 1"
-				]
-			},
-			{
-				text: '设置家',
-				run: [
-					"scoreboard players set @s task 2"
-				]
-			},
-			{
-				text: '回家',
-				run: [
-					"scoreboard players set @s task 3"
-				]
-			},
-			{
-				text: '[这是一条固定内容]'
-			},
-			{
-				text: '返回',
-				run: "主菜单"
-			}
-		]
-	}
-]
+			"data": [
+				{
+					"text": "去生存区",
+					"run": [
+						"tp @s 1000 20 1000"
+					]
+				},
+				{
+					"text": "签到",
+					"run": [
+						"say 签到成功",
+						"scoreboard players set @s task 1"
+					]
+				},
+				{
+					"text": "设置家",
+					"run": [
+						"scoreboard players set @s task 2"
+					]
+				},
+				{
+					"text": "回家",
+					"run": [
+						"scoreboard players set @s task 3"
+					]
+				},
+				{
+					"text": "[这是一条固定内容]"
+				},
+				{
+					"text": "返回",
+					"run": "主菜单"
+				}
+			]
+		}
+	]
+}
 
 ```
 
 #### Menu-render
+
 <p>什么是menu-render?,这是一个简易的AST解析器,并且拥有简易的渲染功能</p>
 <p>有什么用呢?</p>
 <p>1.特殊符号的替换,$(名字)即可替换特殊符号,支持的特殊符号如下:</p>
