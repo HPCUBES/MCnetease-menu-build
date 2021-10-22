@@ -23,6 +23,10 @@ exports .name = '测试菜单'
 exports .hint = '这是测试'
 //入口菜单
 exports .init = '菜单a'
+//需要3个计分板名字
+exports .v1 = '1号'
+exports .v2 = '2号'
+exports .v3 = '3号'
 ```
 #### 页面
 ```javascript
@@ -289,6 +293,10 @@ exports .name = '测试菜单'
 exports .hint = '无'
 
 exports .init = '主菜单'
+
+exports .v1 = 'jf_menu_1'
+exports .v2 = 'jf_menu_1'
+exports .v3 = 'jf_menu_1'
 
 exports .hook = {
 	type: 'entity',
