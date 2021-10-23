@@ -465,7 +465,7 @@ sh ./start.sh
 			"name": "主菜单",
 			"data": [
 				{
-					"text": "§l§6测试菜单 §f名称:§7@p §f余额:§e$(@p,money) 硬币"
+					"text": "§l§6测试菜单 §f名称:§7@p §f余额:§e$(@p,money) $(金币) 生命值:§4$(@p,health) $(盔甲)"
 				},
 				{
 					"text": "回城",
