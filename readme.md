@@ -1,5 +1,9 @@
 # 文档
+
+#### 此程序的源码在私有仓库里面，并且是GLP协议，未经授权禁止倒卖
+#### 作者:LSP-Furry
 #### 您可用通过JSON文本来编写配置信息,为了方便文档,此页面的JSON会将 {"index":data} 写成 {index:data}
+
 
 #### 启动方式
 ```javascript
@@ -16,39 +20,6 @@ sh ./start.sh
 
 #### 由于程序没有使用任何 "有条件的" 命令方块，所以理论上可支持mcfunction
 
-
-#### stackFunc
-<p>这个程序本质上是一个提供命令方块模拟了(栈,函数)合在一起的东西,能够抽象的实现OOP,调用栈,条件,循环,枚举,函数,参数,数据结构等功能,(搭配AST解析器效果更佳),然后生成nbt文件.您无法自定义新的stackFunc,只能调用stackFunc,并且这个程序为了性能绝佳禁用了抽象参数的概念,下面是一堆stackFunc的功能,如果您不需要的话您完全可以忽略此功能,他不是必要的</p>
-
-#### menu-[名称]
-##### 这是一个菜单页面的显示stackFunc,您可以在调用它的时候立刻重新刷新菜单显示
-
-#### menu-[名称]-end
-##### 在保证 v1=menu.index v2=menu[i].eindex的时候如果存在tag=menu-init-[menu[i].eindex]的时候调用,那么会执行结束事件
-
-#### self-iter-tellraw [自执行]
-##### 20tick循环调用menu-[名称][您打开相关menu的时候]
-
-#### cache-1
-##### 1级任务缓存
-
-#### cache-2
-##### 2级任务缓存
-
-#### start
-##### 开始的执行
-
-#### self-iter-init [自执行]
-##### 初始化没有v1计分板的玩家
-
-#### menu-init-[name],name=[hook,run,close,chose]
-##### 平坦二叉事件传递层stackFunc
-
-#### menu-init-on[name],name=[hook,run,close,chose]
-##### 平坦二叉事件激活层stackFunc
-
-#### menu-[name]-on-[menu[i].eindex] 行选项激活stackFunc
-##### 在执行一个选项的时候激活
 
 #### 文档格式,如果没有标记选填,那么代表必填
 ```javascript
@@ -576,5 +547,38 @@ sh ./start.sh
 #### [在商店查询此产品](https://lspower.top/user/shop.html)
 #### [合作](https://lspower.top/fnck.html)
 #### [官网备用](https://hpcubes.com)
-#### [急速云服务器分销,购买可以获得免费定制一次](https://ecs.hpcubes.com)
-##### 如果无法访问官网说明有可能我们的域名因为离谱的注册信息遭到了不测
+##### 如果无法访问官网说明有可能因为离谱的信息遭到了不测
+
+
+#### stackFunc
+<p>这个程序本质上是一个提供命令方块模拟了(栈,函数)合在一起的东西,能够抽象的实现OOP,调用栈,条件,循环,枚举,函数,参数,数据结构等功能,(搭配AST解析器效果更佳),然后生成nbt文件.您无法自定义新的stackFunc,只能调用stackFunc,并且这个程序为了性能绝佳禁用了抽象参数的概念,下面是一堆stackFunc的功能,如果您不需要的话您完全可以忽略此功能,他不是必要的</p>
+
+#### menu-[名称]
+##### 这是一个菜单页面的显示stackFunc,您可以在调用它的时候立刻重新刷新菜单显示
+
+#### menu-[名称]-end
+##### 在保证 v1=menu.index v2=menu[i].eindex的时候如果存在tag=menu-init-[menu[i].eindex]的时候调用,那么会执行结束事件
+
+#### self-iter-tellraw [自执行]
+##### 20tick循环调用menu-[名称][您打开相关menu的时候]
+
+#### cache-1
+##### 1级任务缓存
+
+#### cache-2
+##### 2级任务缓存
+
+#### start
+##### 开始的执行
+
+#### self-iter-init [自执行]
+##### 初始化没有v1计分板的玩家
+
+#### menu-init-[name],name=[hook,run,close,chose]
+##### 平坦二叉事件传递层stackFunc
+
+#### menu-init-on[name],name=[hook,run,close,chose]
+##### 平坦二叉事件激活层stackFunc
+
+#### menu-[name]-on-[menu[i].eindex] 行选项激活stackFunc
+##### 在执行一个选项的时候激活
